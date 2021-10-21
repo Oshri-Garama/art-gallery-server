@@ -1,0 +1,53 @@
+# Logs
+*.log
+*/logs
+*/*.log
+*/npm-debug.log*
+*/yarn-debug.log*
+*/yarn-error.log*
+*/lerna-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+*/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+*/pids
+*/*.pid
+*/*.seed
+*/*.pid.lock
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+*/build/Release
+
+# Dependency directories
+*/node_modules/
+*/*/node_modules/
+*/jspm_packages/
+*/package-lock.json
+
+# Optional npm cache directory
+*/.npm
+
+# Output of 'npm pack'
+*.tgz
+
+# Tests inputs and outputs
+*/*/inputs
+*/*/outputs
+*/outputs
+
+# dotenv environment variables file
+.env*
+*/cred
+
+*.code-workspace
+/node_modules
+**/.firebaserc
+**/dist
+.firebase
+firebase-debug.log
+
+# credentials
+/google_cred
+
+.vscode 

@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const { isEmpty } = require("lodash");
 
 const app = express();
 const http = require("http");
@@ -24,9 +25,21 @@ io.on("connection", (socket) => {
   console.log(`Socket connection established with: ${user_id}`);
 
   socket.on("join_chat", ({ artId }) => {
-    socket.join(artId);
-    console.log(`User with id: ${user_id} joined room: ${artId}`);
+    if (!isEmpty(artId)) {
+      socket.join(artId);
+      console.log(`User with id: ${user_id} joined room: ${artId}`);
+    }
   });
+
+  socket.on("send_message", (data) => {
+    if (!isEmpty(data)) {
+      const { roomId, userName, message, time } = data;
+      console.log(
+        `User with id: ${user_id} sent this data: ${JSON.stringify(data)}`
+      );
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log(`Socket connection was closed by ${user_id}`);
   });
