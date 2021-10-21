@@ -31,12 +31,21 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("leave_chat", ({ artId }) => {
+    if (!isEmpty(artId)) {
+      socket.leave(artId);
+      console.log(`User with id: ${user_id} left room: ${artId}`);
+    }
+  });
+
   socket.on("send_message", (data) => {
     if (!isEmpty(data)) {
-      const { roomId, userName, message, time } = data;
+      const { roomId } = data;
       console.log(
         `User with id: ${user_id} sent this data: ${JSON.stringify(data)}`
       );
+      socket.to(roomId).emit("receive_message", data);
+      console.log(`The data sent successfully to the client`);
     }
   });
 
