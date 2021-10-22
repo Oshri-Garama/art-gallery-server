@@ -11,7 +11,9 @@ const http = require("http");
  */
 const cors = require("cors");
 const { Server } = require("socket.io");
+const compression = require("compression");
 
+app.use(compression());
 app.use(cors());
 
 app.use("/gallery", routes.gallery);
