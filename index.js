@@ -13,6 +13,12 @@ const { Server } = require("socket.io");
 app.use(cors());
 const server = http.createServer(app);
 
+const conditionalLog = (message) => {
+  if (process.env.DEBUG_MODE) {
+    console.log(message);
+  }
+};
+
 const io = new Server(server, {
   cors: {
     origin: process.env.IO_SOCKET_CLIENT_ORIGIN,
@@ -22,30 +28,49 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   const user_id = socket.id;
-  console.log(`Socket connection established with: ${user_id}`);
+  console.log(`Socket connection established with: "${user_id}"`);
 
-  socket.on("join_chat", ({ artId }) => {
+  socket.on("join_chat", (data) => {
+    const { artId, nickname } = data;
     if (!isEmpty(artId)) {
       socket.join(artId);
-      console.log(`User with id: ${user_id} joined room: ${artId}`);
+      console.log(`The User "${user_id}"(${nickname}) joined room: "${artId}"`);
+      // Send message imply that the user joined the conversation
+      const welcome_message = {
+        ...data,
+        message: `${nickname} just entered the room`,
+        chatInformation: true,
+      };
+      socket.to(artId).emit("receive_message", welcome_message);
     }
   });
 
-  socket.on("leave_chat", ({ artId }) => {
-    if (!isEmpty(artId)) {
+  socket.on("leave_chat", (data) => {
+    const { artId, nickname } = data;
+    if (!isEmpty(artId) && !isEmpty(nickname)) {
+      const goodbye_message = {
+        ...data,
+        message: `${nickname} just left the room`,
+        chatInformation: true,
+      };
+      socket.to(artId).emit("receive_message", goodbye_message);
+
       socket.leave(artId);
-      console.log(`User with id: ${user_id} left room: ${artId}`);
+      console.log(`The User "${user_id}"(${nickname}) left room: "${artId}"`);
     }
   });
 
   socket.on("send_message", (data) => {
     if (!isEmpty(data)) {
-      const { roomId } = data;
-      console.log(
-        `User with id: ${user_id} sent this data: ${JSON.stringify(data)}`
+      const { artId, nickname } = data;
+      conditionalLog(
+        `The User "${user_id}"(${nickname}) sent this data: ${JSON.stringify(
+          data
+        )}`
       );
-      socket.to(roomId).emit("receive_message", data);
-      console.log(`The data sent successfully to the client`);
+
+      socket.to(artId).emit("receive_message", data);
+      conditionalLog(`The data sent successfully to the client`);
     }
   });
 
