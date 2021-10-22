@@ -1,4 +1,6 @@
 require("dotenv").config();
+const routes = require("./routes");
+
 const express = require("express");
 const { isEmpty } = require("lodash");
 
@@ -11,6 +13,8 @@ const cors = require("cors");
 const { Server } = require("socket.io");
 
 app.use(cors());
+
+app.use("/gallery", routes.gallery);
 const server = http.createServer(app);
 
 const conditionalLog = (message) => {
