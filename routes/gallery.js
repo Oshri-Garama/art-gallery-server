@@ -11,7 +11,7 @@ router.get("/get/:id", (req, res) => {
     if (isEmpty(art)) {
       return res.status(404).send({
         error_type: "NOT_FOUND",
-        error_description: "Couldn't find art, the given artId doesn't exist",
+        error_description: "Couldn't find art, the given art_d doesn't exist",
       });
     }
 

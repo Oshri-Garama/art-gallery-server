@@ -2,7 +2,7 @@ require("dotenv").config();
 const routes = require("./routes");
 
 const express = require("express");
-const { isEmpty } = require("lodash");
+const isEmpty = require("lodash/isEmpty");
 
 const app = express();
 const http = require("http");
@@ -17,6 +17,7 @@ app.use(compression());
 app.use(cors());
 
 app.use("/gallery", routes.gallery);
+
 const server = http.createServer(app);
 
 const conditionalLog = (message) => {
@@ -38,7 +39,7 @@ io.on("connection", (socket) => {
 
   socket.on("join_chat", (data) => {
     const { artId, nickname } = data;
-    if (!isEmpty(artId)) {
+    if (!isEmpty(artId) && !isEmpty(nickname)) {
       socket.join(artId);
       console.log(`The User "${user_id}"(${nickname}) joined room: "${artId}"`);
       // Send message imply that the user joined the conversation
