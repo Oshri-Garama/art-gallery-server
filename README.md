@@ -1,6 +1,7 @@
 # Art gallery server
 
 The project includes an art gallery of static images (which stored on a Firebase bucket).
+
 Each art is composed of: Image, name, artist name, description.
 The implemented features:
 1) Created chat rooms by using socket emits, and by listeners. (socket.io-server)
